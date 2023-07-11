@@ -14,4 +14,15 @@ Many projects maintain Docker images on [Docker Hub](https://hub.docker.com/). I
 Many projects will ship a Docker image with their Github repository. The image is created by building a `Dockerfile` available from a Github repository by following the instructions in the project's README. An example can be seen in the [Geth Github repository](https://github.com/ethereum/go-ethereum#docker-quick-start). 
 
 
-## Building Docker Images
+## Building Containers from Docker Hub
+When pulling from Docker Hub, you can pull an image and run a container with it in a single command -
+`docker run -d --name ethereum-node -p 8545:8545 -p 30303:30303 ethereum/client-go`
+
+## Building Containers from Dockerfile
+When a Dockerfile is provided, you must first build the Docker image locally, then run a container with it. 
+```
+cd <local repo path with Dockerfile>
+docker build . -t <image name> 
+docker run <image name>
+```
+
