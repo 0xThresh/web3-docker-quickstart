@@ -18,11 +18,20 @@ Many projects will ship a Docker image with their Github repository. The image i
 When pulling from Docker Hub, you can pull an image and run a container with it in a single command -
 `docker run -d --name ethereum-node -p 8545:8545 -p 30303:30303 ethereum/client-go`
 
+
+The `docker` command acts as our starting point for any Docker operations we'll perform. The `run` command tells Docker to create a container using the `ethereum/client-go` image. The `-p` flag is used to specify what ports on our local machine the container should listen on, allowing us to interact with those ports on the container. The `--name` flag gives a name to the container so that we can identify it with other Docker commands later. The `-d` flag runs the container in "detached" mode, which means it will run without connecting our active terminal to the container. 
+
+
+In order to connect to our geth node in our terminal, we can run the command below:
+`docker exec -i ethereum-node /bin/sh` 
+
+
 ## Building Containers from Dockerfile
-When a Dockerfile is provided, you must first build the Docker image locally, then run a container with it. 
+When a Dockerfile is provided, you must first build the Docker image locally, then run a container with it. Let's use the Geth repo as our example.
 ```
-cd <local repo path with Dockerfile>
-docker build . -t <image name> 
-docker run <image name>
+git clone git@github.com:ethereum/go-ethereum.git
+cd go-ethereum
+docker build . -t geth
+docker run -d --name test-geth geth 
 ```
 
