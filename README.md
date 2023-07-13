@@ -1,4 +1,6 @@
 # web3-docker-quickstart
+Watch my [Using Docker in Web3](https://www.youtube.com/watch?v=RIdoXMPI6J8) workshop with Developer DAO to see me run through this repo live!
+
 Docker containers can help simplify many of the workflows used in web3. They can be especially useful when you need to run an Ethereum client (such as geth) or network node (such as a Filecoin Lotus node or a Chainlink node), without having to do all of the pre-configuration yourself. 
 
 ## Installing Docker
