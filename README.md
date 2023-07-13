@@ -35,3 +35,37 @@ docker build . -t geth
 docker run -d --name test-geth geth 
 ```
 
+## Building Your Own Images
+When writing your own software, you can turn it into a Docker image that can be used to easily distribute it to others. For our example, we have a very simple Express server in `src/server.ts` that we'll use to demonstrate the process.
+
+First, we'll want to build our image: 
+`docker build -t docker-express .`
+
+We should see output similar to this: 
+```
+[+] Building 9.3s (9/9) FINISHED                                                                                 
+ => [internal] load .dockerignore                                                                           0.0s
+ => => transferring context: 2B                                                                             0.0s
+ => [internal] load build definition from Dockerfile                                                        0.0s
+ => => transferring dockerfile: 223B                                                                        0.0s
+ => [internal] load metadata for docker.io/library/node:16.20                                               1.6s
+ => CACHED [1/4] FROM docker.io/library/node:16.20@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfd  0.0s
+ => [internal] load build context                                                                           0.4s
+ => => transferring context: 960.98kB                                                                       0.4s
+ => [2/4] COPY . /opt/express                                                                               0.8s
+ => [3/4] WORKDIR /opt/express                                                                              0.0s
+ => [4/4] RUN yarn install                                                                                  5.6s
+ => exporting to image                                                                                      1.0s
+ => => exporting layers                                                                                     1.0s
+ => => writing image sha256:9320eb3a322abe61c58ba19d191944fd2bb05a59da6798dcd6b3fbaad03d2ed8                0.0s 
+ => => naming to docker.io/library/docker-express 
+```
+
+Then, we can create a container using our new image. We'll want to make sure to use the `-d` flag to run it in the background, and the `-p` flag to expose port 8080 on localhost. The final command will look like this: 
+`docker run -d -p 8080:8080 --name test-express docker-express`
+
+Now that our container is running, we should be able to run a command to test that it's up:
+
+`curl localhost:8080`
+
+As you can see, our Express server answers the request, just like it would if we had simply run `yarn start` to start our server! 
