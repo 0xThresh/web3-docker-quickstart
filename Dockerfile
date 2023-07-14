@@ -1,7 +1,5 @@
 FROM node:16.20
 
-#RUN npm install -g yarn
-
 COPY . /opt/express
 
 WORKDIR /opt/express
