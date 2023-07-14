@@ -1,4 +1,6 @@
 # web3-docker-quickstart
+Watch my [Using Docker in Web3](https://www.youtube.com/watch?v=RIdoXMPI6J8) workshop with Developer DAO to see me run through this repo live!
+
 Docker containers can help simplify many of the workflows used in web3. They can be especially useful when you need to run an Ethereum client (such as geth) or network node (such as a Filecoin Lotus node or a Chainlink node), without having to do all of the pre-configuration yourself. 
 
 ## Installing Docker
@@ -22,8 +24,11 @@ When pulling from Docker Hub, you can pull an image and run a container with it 
 The `docker` command acts as our starting point for any Docker operations we'll perform. The `run` command tells Docker to create a container using the `ethereum/client-go` image. The `-p` flag is used to specify what ports on our local machine the container should listen on, allowing us to interact with those ports on the container. The `--name` flag gives a name to the container so that we can identify it with other Docker commands later. The `-d` flag runs the container in "detached" mode, which means it will run without connecting our active terminal to the container. 
 
 
-In order to connect to our geth node in our terminal, we can run the command below:
+In order to execute a command on our geth node, we use `docker exec`. One of the most useful ways to use `docker exec` is to get a live terminal on our container. In order to do that, we can run the command below:
 `docker exec -i ethereum-node /bin/sh` 
+
+We can also simply attach to the container, which will let us see the running app's output. In the case of Geth, we should see its connection logs. We can attach with the command below:
+`docker attach ethereum-node`
 
 
 ## Building Containers from Dockerfile
@@ -35,3 +40,37 @@ docker build . -t geth
 docker run -d --name test-geth geth 
 ```
 
+## Building Your Own Images
+When writing your own software, you can turn it into a Docker image that can be used to easily distribute it to others. For our example, we have a very simple Express server in `src/server.ts` that we'll use to demonstrate the process.
+
+First, we'll want to build our image: 
+`docker build -t docker-express .`
+
+We should see output similar to this: 
+```
+[+] Building 9.3s (9/9) FINISHED                                                                                 
+ => [internal] load .dockerignore                                                                           0.0s
+ => => transferring context: 2B                                                                             0.0s
+ => [internal] load build definition from Dockerfile                                                        0.0s
+ => => transferring dockerfile: 223B                                                                        0.0s
+ => [internal] load metadata for docker.io/library/node:16.20                                               1.6s
+ => CACHED [1/4] FROM docker.io/library/node:16.20@sha256:466d0a05ecb1e5b9890960592311fa10c2bc6012fc27dbfd  0.0s
+ => [internal] load build context                                                                           0.4s
+ => => transferring context: 960.98kB                                                                       0.4s
+ => [2/4] COPY . /opt/express                                                                               0.8s
+ => [3/4] WORKDIR /opt/express                                                                              0.0s
+ => [4/4] RUN yarn install                                                                                  5.6s
+ => exporting to image                                                                                      1.0s
+ => => exporting layers                                                                                     1.0s
+ => => writing image sha256:9320eb3a322abe61c58ba19d191944fd2bb05a59da6798dcd6b3fbaad03d2ed8                0.0s 
+ => => naming to docker.io/library/docker-express 
+```
+
+Then, we can create a container using our new image. We'll want to make sure to use the `-d` flag to run it in the background, and the `-p` flag to expose port 8080 on localhost. The final command will look like this: 
+`docker run -d -p 8080:8080 --name test-express docker-express`
+
+Now that our container is running, we should be able to run a command to test that it's up:
+
+`curl localhost:8080`
+
+As you can see, our Express server answers the request, just like it would if we had simply run `yarn start` to start our server! 
