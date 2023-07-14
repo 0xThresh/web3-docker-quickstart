@@ -24,8 +24,11 @@ When pulling from Docker Hub, you can pull an image and run a container with it 
 The `docker` command acts as our starting point for any Docker operations we'll perform. The `run` command tells Docker to create a container using the `ethereum/client-go` image. The `-p` flag is used to specify what ports on our local machine the container should listen on, allowing us to interact with those ports on the container. The `--name` flag gives a name to the container so that we can identify it with other Docker commands later. The `-d` flag runs the container in "detached" mode, which means it will run without connecting our active terminal to the container. 
 
 
-In order to connect to our geth node in our terminal, we can run the command below:
+In order to execute a command on our geth node, we use `docker exec`. One of the most useful ways to use `docker exec` is to get a live terminal on our container. In order to do that, we can run the command below:
 `docker exec -i ethereum-node /bin/sh` 
+
+We can also simply attach to the container, which will let us see the running app's output. In the case of Geth, we should see its connection logs. We can attach with the command below:
+`docker attach ethereum-node`
 
 
 ## Building Containers from Dockerfile
