@@ -25,7 +25,7 @@ The `docker` command acts as our starting point for any Docker operations we'll 
 
 
 In order to execute a command on our geth node, we use `docker exec`. One of the most useful ways to use `docker exec` is to get a live terminal on our container. In order to do that, we can run the command below:
-`docker exec -i ethereum-node /bin/sh` 
+`docker exec -it ethereum-node /bin/sh` 
 
 We can also simply attach to the container, which will let us see the running app's output. In the case of Geth, we should see its connection logs. We can attach with the command below:
 `docker attach ethereum-node`
@@ -92,3 +92,6 @@ It's possible to mount directories on your local system in a container so that t
 
 In web3, this is especially useful in situations where your code needs access to a wallet's private key that's stored on your system. In our example, we are storing our `.env` file in the `mnt/` directory. In order to grant our container access to our `.env` file, we'll run a `docker run` command that includes the `-v` flag, as shown below: 
 `docker run -d -p 8080:8080 -v "$(pwd)"/mnt:/opt/express/secret --name mounted-express docker-express`
+
+In order to check that our mount is valid, we can use the command below:
+`docker exec mounted-express cat /opt/express/secret/.env`
