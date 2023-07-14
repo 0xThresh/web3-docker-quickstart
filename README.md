@@ -91,4 +91,4 @@ The `.dockerignore` file works just like a `.gitignore` file. Let's say you're u
 It's possible to mount directories on your local system in a container so that the container has access to them. This makes it possible to avoid accidentally adding your secrets to a Docker image that you'll host publicly on Docker Hub, while still allowing your container to have access to what it needs. 
 
 In web3, this is especially useful in situations where your code needs access to a wallet's private key that's stored on your system. In our example, we are storing our `.env` file in the `mnt/` directory. In order to grant our container access to our `.env` file, we'll run a `docker run` command that includes the `-v` flag, as shown below: 
-`docker run -d -p 8080:8080 --name mounted-express docker-express`
+`docker run -d -p 8080:8080 -v "$(pwd)"/mnt:/opt/express/secret --name mounted-express docker-express`
