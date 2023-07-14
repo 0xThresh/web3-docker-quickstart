@@ -74,3 +74,21 @@ Now that our container is running, we should be able to run a command to test th
 `curl localhost:8080`
 
 As you can see, our Express server answers the request, just like it would if we had simply run `yarn start` to start our server! 
+
+## Tips and Tricks
+Now that we've got the basics down, let's talk about some extra tips, and useful features of Docker.
+
+### Tip: Name ALL The Things!!!
+Docker *will* create resources without names if you want it to, but you should use image tags and container names wherever possible to keep track what you’ve built. This includes using the `-t` flag on your `docker build` commands to add tags to your images. The same idea applies to using the `--name` flag when running your containers with `docker run`. It's very easy to lose track of what's what when you're stuck trying to identify images and containers with IDs like `e7f49ddf3075`. 
+
+
+### Trick: Use .dockerignore
+Just like any other software, you want to reduce bloat on your Docker images and containers as much as possible to keep them running quick, and to make sure you don't accidentally reveal something (code, secrets, etc.) to the world through your public images. A helpful tool to handle this is a `.dockerignore` file.
+
+The `.dockerignore` file works just like a `.gitignore` file. Let's say you're using a `COPY` command in your Dockerfile that gets everything from a directory, but that directory includes a `.git` folder and a `.env` file that you don't want to include into the container image. By using a `.dockerignore` file in the same folder as your Dockerfile, you can prevent those files from making it into your image.
+
+### Trick: Mounting Local Directories in a Container 
+It's possible to mount directories on your local system in a container so that the container has access to them. This makes it possible to avoid accidentally adding your secrets to a Docker image that you'll host publicly on Docker Hub, while still allowing your container to have access to what it needs. 
+
+In web3, this is especially useful in situations where your code needs access to a wallet's private key that's stored on your system. In our example, we are storing our `.env` file in the `mnt/` directory. In order to grant our container access to our `.env` file, we'll run a `docker run` command that includes the `-v` flag, as shown below: 
+`docker run -d -p 8080:8080 --name mounted-express docker-express`
